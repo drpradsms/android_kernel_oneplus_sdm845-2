@@ -7480,6 +7480,345 @@ int dsi_display_get_fp_hbm_mode(struct drm_connector *connector)
 
 	return dsi_display->panel->op_force_screenfp;
 }
+int dsi_display_set_srgb_mode(struct drm_connector *connector, int level)
+{
+    struct dsi_display *dsi_display = NULL;
+	struct dsi_panel *panel = NULL;
+	struct dsi_bridge *c_bridge;
+	int rc = 0;
+
+    if ((connector == NULL) || (connector->encoder == NULL)
+            || (connector->encoder->bridge == NULL))
+        return 0;
+
+    c_bridge =  to_dsi_bridge(connector->encoder->bridge);
+    dsi_display = c_bridge->display;
+
+	if ((dsi_display == NULL) || (dsi_display->panel == NULL))
+		return -EINVAL;
+
+	panel = dsi_display->panel;
+
+	mutex_lock(&dsi_display->display_lock);
+
+	panel->srgb_mode = level;
+	if (!dsi_panel_initialized(panel)) {
+		goto error;
+	}
+
+	rc = dsi_display_clk_ctrl(dsi_display->dsi_clk_handle,
+			DSI_CORE_CLK, DSI_CLK_ON);
+	if (rc) {
+		pr_err("[%s] failed to enable DSI core clocks, rc=%d\n",
+		       dsi_display->name, rc);
+		goto error;
+	}
+
+	rc = dsi_panel_set_srgb_mode(panel, level);
+	if (rc)
+		pr_err("unable to set srgb mode\n");
+
+	rc = dsi_display_clk_ctrl(dsi_display->dsi_clk_handle,
+			DSI_CORE_CLK, DSI_CLK_OFF);
+	if (rc) {
+		pr_err("[%s] failed to disable DSI core clocks, rc=%d\n",
+		       dsi_display->name, rc);
+		goto error;
+	}
+error:
+	mutex_unlock(&dsi_display->display_lock);
+	return rc;
+}
+
+int dsi_display_get_srgb_mode(struct drm_connector *connector)
+{
+	struct dsi_display *dsi_display = NULL;
+	struct dsi_bridge *c_bridge;
+
+    if ((connector == NULL) || (connector->encoder == NULL)
+            || (connector->encoder->bridge == NULL))
+        return 0;
+
+    c_bridge =  to_dsi_bridge(connector->encoder->bridge);
+    dsi_display = c_bridge->display;
+
+	if ((dsi_display == NULL) || (dsi_display->panel == NULL))
+		return 0;
+
+	return dsi_display->panel->srgb_mode;
+}
+
+int dsi_display_set_dci_p3_mode(struct drm_connector *connector, int level)
+{
+    struct dsi_display *dsi_display = NULL;
+	struct dsi_panel *panel = NULL;
+	struct dsi_bridge *c_bridge;
+	int rc = 0;
+
+    if ((connector == NULL) || (connector->encoder == NULL)
+            || (connector->encoder->bridge == NULL))
+        return 0;
+
+    c_bridge =  to_dsi_bridge(connector->encoder->bridge);
+    dsi_display = c_bridge->display;
+
+	if ((dsi_display == NULL) || (dsi_display->panel == NULL))
+		return -EINVAL;
+
+	panel = dsi_display->panel;
+
+	mutex_lock(&dsi_display->display_lock);
+
+	panel->dci_p3_mode = level;
+	if (!dsi_panel_initialized(panel)) {
+		goto error;
+	}
+
+	rc = dsi_display_clk_ctrl(dsi_display->dsi_clk_handle,
+			DSI_CORE_CLK, DSI_CLK_ON);
+	if (rc) {
+		pr_err("[%s] failed to enable DSI core clocks, rc=%d\n",
+		       dsi_display->name, rc);
+		goto error;
+	}
+
+	rc = dsi_panel_set_dci_p3_mode(panel, level);
+	if (rc)
+		pr_err("unable to set dci_p3 mode\n");
+
+	rc = dsi_display_clk_ctrl(dsi_display->dsi_clk_handle,
+			DSI_CORE_CLK, DSI_CLK_OFF);
+	if (rc) {
+		pr_err("[%s] failed to disable DSI core clocks, rc=%d\n",
+		       dsi_display->name, rc);
+		goto error;
+	}
+error:
+	mutex_unlock(&dsi_display->display_lock);
+	return rc;
+}
+
+int dsi_display_get_dci_p3_mode(struct drm_connector *connector)
+{
+	struct dsi_display *dsi_display = NULL;
+	struct dsi_bridge *c_bridge;
+
+    if ((connector == NULL) || (connector->encoder == NULL)
+            || (connector->encoder->bridge == NULL))
+        return 0;
+
+    c_bridge =  to_dsi_bridge(connector->encoder->bridge);
+    dsi_display = c_bridge->display;
+
+	if ((dsi_display == NULL) || (dsi_display->panel == NULL))
+		return 0;
+
+	return dsi_display->panel->dci_p3_mode;
+}
+
+int dsi_display_set_night_mode(struct drm_connector *connector, int level)
+{
+    struct dsi_display *dsi_display = NULL;
+	struct dsi_panel *panel = NULL;
+	struct dsi_bridge *c_bridge;
+	int rc = 0;
+
+    if ((connector == NULL) || (connector->encoder == NULL)
+            || (connector->encoder->bridge == NULL))
+        return 0;
+
+    c_bridge =  to_dsi_bridge(connector->encoder->bridge);
+    dsi_display = c_bridge->display;
+
+	if ((dsi_display == NULL) || (dsi_display->panel == NULL))
+		return -EINVAL;
+
+	panel = dsi_display->panel;
+
+	mutex_lock(&dsi_display->display_lock);
+
+	panel->night_mode = level;
+	if (!dsi_panel_initialized(panel)) {
+		goto error;
+	}
+
+	rc = dsi_display_clk_ctrl(dsi_display->dsi_clk_handle,
+			DSI_CORE_CLK, DSI_CLK_ON);
+	if (rc) {
+		pr_err("[%s] failed to enable DSI core clocks, rc=%d\n",
+		       dsi_display->name, rc);
+		goto error;
+	}
+
+	rc = dsi_panel_set_night_mode(panel, level);
+	if (rc)
+		pr_err("unable to set night mode\n");
+
+	rc = dsi_display_clk_ctrl(dsi_display->dsi_clk_handle,
+			DSI_CORE_CLK, DSI_CLK_OFF);
+	if (rc) {
+		pr_err("[%s] failed to disable DSI core clocks, rc=%d\n",
+		       dsi_display->name, rc);
+		goto error;
+	}
+error:
+	mutex_unlock(&dsi_display->display_lock);
+	return rc;
+}
+
+int dsi_display_get_night_mode(struct drm_connector *connector)
+{
+	struct dsi_display *dsi_display = NULL;
+	struct dsi_bridge *c_bridge;
+
+    if ((connector == NULL) || (connector->encoder == NULL)
+            || (connector->encoder->bridge == NULL))
+        return 0;
+
+    c_bridge =  to_dsi_bridge(connector->encoder->bridge);
+    dsi_display = c_bridge->display;
+
+	if ((dsi_display == NULL) || (dsi_display->panel == NULL))
+		return 0;
+
+	return dsi_display->panel->night_mode;
+}
+
+int dsi_display_set_oneplus_mode(struct drm_connector *connector, int level)
+{
+    struct dsi_display *dsi_display = NULL;
+	struct dsi_panel *panel = NULL;
+	struct dsi_bridge *c_bridge;
+	int rc = 0;
+
+    if ((connector == NULL) || (connector->encoder == NULL)
+            || (connector->encoder->bridge == NULL))
+        return 0;
+
+    c_bridge =  to_dsi_bridge(connector->encoder->bridge);
+    dsi_display = c_bridge->display;
+
+	if ((dsi_display == NULL) || (dsi_display->panel == NULL))
+		return -EINVAL;
+
+	panel = dsi_display->panel;
+
+	mutex_lock(&dsi_display->display_lock);
+
+	panel->oneplus_mode = level;
+	if (!dsi_panel_initialized(panel)) {
+		goto error;
+	}
+
+	rc = dsi_display_clk_ctrl(dsi_display->dsi_clk_handle,
+			DSI_CORE_CLK, DSI_CLK_ON);
+	if (rc) {
+		pr_err("[%s] failed to enable DSI core clocks, rc=%d\n",
+		       dsi_display->name, rc);
+		goto error;
+	}
+
+	rc = dsi_panel_set_oneplus_mode(panel, level);
+	if (rc)
+		pr_err("unable to set oneplus mode\n");
+
+	rc = dsi_display_clk_ctrl(dsi_display->dsi_clk_handle,
+			DSI_CORE_CLK, DSI_CLK_OFF);
+	if (rc) {
+		pr_err("[%s] failed to disable DSI core clocks, rc=%d\n",
+		       dsi_display->name, rc);
+		goto error;
+	}
+error:
+	mutex_unlock(&dsi_display->display_lock);
+	return rc;
+}
+
+int dsi_display_get_oneplus_mode(struct drm_connector *connector)
+{
+	struct dsi_display *dsi_display = NULL;
+	struct dsi_bridge *c_bridge;
+
+    if ((connector == NULL) || (connector->encoder == NULL)
+            || (connector->encoder->bridge == NULL))
+        return 0;
+
+    c_bridge =  to_dsi_bridge(connector->encoder->bridge);
+    dsi_display = c_bridge->display;
+
+	if ((dsi_display == NULL) || (dsi_display->panel == NULL))
+		return 0;
+
+	return dsi_display->panel->oneplus_mode;
+}
+
+int dsi_display_set_adaption_mode(struct drm_connector *connector, int level)
+{
+    struct dsi_display *dsi_display = NULL;
+	struct dsi_panel *panel = NULL;
+	struct dsi_bridge *c_bridge;
+	int rc = 0;
+
+    if ((connector == NULL) || (connector->encoder == NULL)
+            || (connector->encoder->bridge == NULL))
+        return 0;
+
+    c_bridge =  to_dsi_bridge(connector->encoder->bridge);
+    dsi_display = c_bridge->display;
+
+	if ((dsi_display == NULL) || (dsi_display->panel == NULL))
+		return -EINVAL;
+
+	panel = dsi_display->panel;
+
+	mutex_lock(&dsi_display->display_lock);
+
+	panel->adaption_mode = level;
+	if (!dsi_panel_initialized(panel)) {
+		goto error;
+	}
+
+	rc = dsi_display_clk_ctrl(dsi_display->dsi_clk_handle,
+			DSI_CORE_CLK, DSI_CLK_ON);
+	if (rc) {
+		pr_err("[%s] failed to enable DSI core clocks, rc=%d\n",
+		       dsi_display->name, rc);
+		goto error;
+	}
+
+	rc = dsi_panel_set_adaption_mode(panel, level);
+	if (rc)
+		pr_err("unable to set adaption mode\n");
+
+	rc = dsi_display_clk_ctrl(dsi_display->dsi_clk_handle,
+			DSI_CORE_CLK, DSI_CLK_OFF);
+	if (rc) {
+		pr_err("[%s] failed to disable DSI core clocks, rc=%d\n",
+		       dsi_display->name, rc);
+		goto error;
+	}
+error:
+	mutex_unlock(&dsi_display->display_lock);
+	return rc;
+}
+
+int dsi_display_get_adaption_mode(struct drm_connector *connector)
+{
+	struct dsi_display *dsi_display = NULL;
+	struct dsi_bridge *c_bridge;
+
+    if ((connector == NULL) || (connector->encoder == NULL)
+            || (connector->encoder->bridge == NULL))
+        return 0;
+
+    c_bridge =  to_dsi_bridge(connector->encoder->bridge);
+    dsi_display = c_bridge->display;
+
+	if ((dsi_display == NULL) || (dsi_display->panel == NULL))
+		return 0;
+
+	return dsi_display->panel->adaption_mode;
+}
 
 int dsi_display_set_aod_mode(struct drm_connector *connector, int level)
 {
