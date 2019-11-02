@@ -4331,7 +4331,7 @@ int dsi_panel_apply_display_mode(struct dsi_panel *panel)
 	int rc;
 
 	switch (panel->display_mode) {
-		case DISPLAY_MODE_SRGB: type = DSI_CMD_SET_MODE_SRGB; break;
+		case DISPLAY_MODE_SRGB: type = DSI_CMD_SET_NATIVE_DISPLAY_SRGB_COLOR_ON; break;
 		case DISPLAY_MODE_DCI_P3: type = DSI_CMD_SET_MODE_DCI_P3; break;
 		case DISPLAY_MODE_NIGHT: type = DSI_CMD_SET_MODE_NIGHT; break;
 		case DISPLAY_MODE_ONEPLUS: type = DSI_CMD_SET_MODE_ONEPLUS; break;

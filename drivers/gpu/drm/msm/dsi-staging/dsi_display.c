@@ -5051,7 +5051,7 @@ static ssize_t sysfs_display_mode_read(struct device *dev,
 	return 0;
 
     return scnprintf(buf, PAGE_SIZE, "%s\n",
-	display->panel->display_mode == DISPLAY_MODE_SRGB ? "srgb" :
+	display->panel->display_mode == DISPLAY_MODE_SRGB ? "display-srgb-color-mode" :
 	display->panel->display_mode == DISPLAY_MODE_DCI_P3 ? "dci-p3" :
 	display->panel->display_mode == DISPLAY_MODE_NIGHT ? "night" :
 	display->panel->display_mode == DISPLAY_MODE_ONEPLUS ? "oneplus" :
@@ -5069,7 +5069,7 @@ static ssize_t sysfs_display_mode_write(struct device *dev,
     if (!display->panel)
 	return -EINVAL;
 
-    if (!strcmp(buf, "srgb"))
+    if (!strcmp(buf, "display-srgb-color-mode"))
 	mode = DISPLAY_MODE_SRGB;
     else if (!strcmp(buf, "dci-p3"))
 	mode = DISPLAY_MODE_DCI_P3;
